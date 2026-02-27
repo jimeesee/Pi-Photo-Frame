@@ -2,24 +2,23 @@
 """Touch swipe daemon for Pi Photo Frame.
 
 Reads raw touch events from an ILITEK USB touchscreen via evdev,
-detects swipe gestures with velocity scaling, and injects arrow key
-events via xdotool that picframe's SDL2 keyboard handler picks up
-through X11/Xwayland.
+detects swipe gestures, and publishes MQTT messages to picframe's
+navigation topics. No X11/Wayland dependency — works reliably even
+during video playback.
 
 Usage:
     python3 touch_daemon.py [options]
 
-Requires: pip install evdev, apt install xdotool
+Requires: pip install evdev paho-mqtt
 """
 
 import argparse
 import logging
-import os
-import subprocess
 import sys
 import time
 
 import evdev
+import paho.mqtt.publish as mqtt_publish
 from evdev import ecodes
 
 logger = logging.getLogger("touch_daemon")
@@ -32,7 +31,10 @@ DEFAULT_SOFT_MAX_VEL = 60000    # units/s — soft/medium boundary
 DEFAULT_MEDIUM_MAX_VEL = 100000 # units/s — medium/hard boundary
 DEFAULT_HARD_MAX_KEYS = 8       # max key presses for hardest swipe
 DEFAULT_DEBOUNCE_SEC = 0.3      # seconds after a swipe to ignore events
-DEFAULT_KEY_INTERVAL = 0.05     # seconds between injected key presses
+DEFAULT_KEY_INTERVAL = 0.05     # seconds between MQTT publishes
+DEFAULT_MQTT_HOST = "localhost"
+DEFAULT_MQTT_PORT = 1883
+DEFAULT_DEVICE_ID = "picframe"
 
 
 def find_touch_device(name_substring: str) -> evdev.InputDevice:
@@ -134,7 +136,7 @@ class SwipeDetector:
             label = "hard"
 
         self._last_swipe_time = now
-        dir_label = "next" if direction > 0 else "back"
+        dir_label = "back" if direction > 0 else "next"
         logger.info(
             "Swipe %s (%s): start=%d end=%d delta=%d distance=%d vel=%.0f keys=%d",
             dir_label, label, self._start_x, self._current_x,
@@ -143,14 +145,20 @@ class SwipeDetector:
         return direction, key_count
 
 
-def inject_keys(direction: int, count: int, interval: float) -> None:
-    """Inject *count* arrow-key presses via xdotool through X11."""
-    # Swipe left = next (Right key), swipe right = back (Left key)
-    key_name = "Left" if direction > 0 else "Right"
-    env = {**os.environ, "DISPLAY": ":0"}
+def publish_navigation(direction: int, count: int, interval: float,
+                       mqtt_host: str, mqtt_port: int,
+                       device_id: str) -> None:
+    """Publish next/back commands to picframe via MQTT."""
+    # Swipe left (negative delta) = next, swipe right (positive delta) = back
+    action = "next" if direction == -1 else "back"
+    topic = f"homeassistant/button/{device_id}_{action}/set"
     for i in range(count):
-        subprocess.run(["xdotool", "key", key_name],
-                       env=env, timeout=2, check=False)
+        try:
+            mqtt_publish.single(topic, payload="ON",
+                                hostname=mqtt_host, port=mqtt_port)
+            logger.debug("Published %s to %s", action, topic)
+        except Exception:
+            logger.exception("Failed to publish MQTT message")
         if i < count - 1:
             time.sleep(interval)
 
@@ -164,13 +172,15 @@ def run(args: argparse.Namespace) -> None:
     dev.grab()
     logger.info("Grabbed exclusive access to %s", dev.path)
 
-    # Verify xdotool is available
+    # Verify MQTT broker is reachable
     try:
-        subprocess.run(["xdotool", "version"], capture_output=True,
-                       timeout=2, check=True)
-        logger.info("xdotool available for key injection")
-    except (FileNotFoundError, subprocess.CalledProcessError) as e:
-        raise RuntimeError("xdotool not found — install with: sudo apt install xdotool") from e
+        mqtt_publish.single("picframe/touch_daemon/status", payload="online",
+                            hostname=args.mqtt_host, port=args.mqtt_port)
+        logger.info("MQTT broker reachable at %s:%d", args.mqtt_host, args.mqtt_port)
+    except Exception as e:
+        raise RuntimeError(
+            f"Cannot connect to MQTT broker at {args.mqtt_host}:{args.mqtt_port}"
+        ) from e
 
     detector = SwipeDetector(
         min_distance=args.min_distance,
@@ -195,7 +205,11 @@ def run(args: argparse.Namespace) -> None:
                     result = detector.on_touch_up()
                     if result:
                         direction, count = result
-                        inject_keys(direction, count, args.key_interval)
+                        publish_navigation(direction, count,
+                                           args.key_interval,
+                                           args.mqtt_host,
+                                           args.mqtt_port,
+                                           args.device_id)
 
     except KeyboardInterrupt:
         logger.info("Shutting down")
@@ -234,6 +248,18 @@ def main() -> None:
     parser.add_argument(
         "--key-interval", type=float, default=DEFAULT_KEY_INTERVAL,
         help="Seconds between injected key presses (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--mqtt-host", default=DEFAULT_MQTT_HOST,
+        help="MQTT broker hostname (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--mqtt-port", type=int, default=DEFAULT_MQTT_PORT,
+        help="MQTT broker port (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--device-id", default=DEFAULT_DEVICE_ID,
+        help="Picframe MQTT device_id (default: %(default)s)",
     )
     parser.add_argument(
         "--log-level", default="INFO",
