@@ -131,11 +131,13 @@ def write_config_raw(raw_yaml: str) -> None:
 def index():
     config = read_config()
     raw_yaml = read_config_raw()
+    current_transform = get_current_transform()
     return render_template(
         "index.html",
         config=config,
         raw_yaml=raw_yaml,
         schema=SETTINGS_SCHEMA,
+        current_transform=current_transform,
     )
 
 
@@ -172,6 +174,54 @@ def save_raw_config():
         return jsonify({"status": "error", "message": f"Invalid YAML: {e}"}), 400
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400
+
+
+WLR_RANDR_ENV = {
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "PATH": os.environ.get("PATH", "/usr/bin:/bin"),
+}
+
+
+def get_current_transform() -> str:
+    """Get the current display transform via wlr-randr."""
+    try:
+        result = subprocess.run(
+            ["wlr-randr"],
+            capture_output=True, text=True, timeout=5,
+            env={**os.environ, **WLR_RANDR_ENV},
+        )
+        for line in result.stdout.splitlines():
+            if "Transform:" in line:
+                return line.split("Transform:")[1].strip()
+    except Exception:
+        pass
+    return "normal"
+
+
+@app.route("/api/rotation", methods=["GET"])
+def get_rotation():
+    return jsonify({"transform": get_current_transform()})
+
+
+@app.route("/api/rotation", methods=["POST"])
+def set_rotation():
+    """Set display rotation via wlr-randr."""
+    try:
+        transform = request.get_json().get("transform", "normal")
+        valid = {"normal", "90", "180", "270", "flipped", "flipped-90", "flipped-180", "flipped-270"}
+        if transform not in valid:
+            return jsonify({"status": "error", "message": f"Invalid transform: {transform}"}), 400
+        result = subprocess.run(
+            ["wlr-randr", "--output", "HDMI-A-1", "--transform", transform],
+            capture_output=True, text=True, timeout=5,
+            env={**os.environ, **WLR_RANDR_ENV},
+        )
+        if result.returncode == 0:
+            return jsonify({"status": "ok", "message": f"Rotated to {transform}"})
+        return jsonify({"status": "error", "message": result.stderr}), 500
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route("/api/restart", methods=["POST"])
