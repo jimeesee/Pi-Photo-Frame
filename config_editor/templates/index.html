@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Frame Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* ── Reset & Base ─────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream: #F5F0E8;
+            --parchment: #FDFBF7;
+            --amber: #C8956C;
+            --amber-light: #E8C9A8;
+            --amber-glow: #D4A574;
+            --walnut: #3A2A1A;
+            --walnut-light: #5C4A38;
+            --walnut-mid: #4A3828;
+            --warm-gray: #8A7E72;
+            --warm-gray-light: #B8ADA2;
+            --rose-dust: #C4A28A;
+            --shadow-warm: rgba(58, 42, 26, 0.12);
+            --shadow-deep: rgba(58, 42, 26, 0.22);
+            --paper-texture: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        body {
+            font-family: 'Lora', Georgia, serif;
+            background-color: var(--cream);
+            background-image: var(--paper-texture);
+            color: var(--walnut);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ── Header ───────────────────────────────────────── */
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 1.5rem;
+            position: relative;
+        }
+
+        header h1 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 600;
+            font-size: 2.6rem;
+            color: var(--walnut);
+            letter-spacing: 0.02em;
+        }
+
+        header p {
+            color: var(--warm-gray);
+            font-style: italic;
+            font-size: 0.95rem;
+            margin-top: 0.3rem;
+        }
+
+        /* decorative rule */
+        .header-rule {
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--amber), transparent);
+            margin: 1.2rem auto 0;
+            border: none;
+        }
+
+        /* ── Navigation Tabs ──────────────────────────────── */
+        .tab-bar {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin: 0 auto 2rem;
+            max-width: 380px;
+            background: var(--parchment);
+            border-radius: 30px;
+            padding: 4px;
+            box-shadow: inset 0 1px 3px var(--shadow-warm);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            background: transparent;
+            font-family: 'Lora', serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--warm-gray);
+            cursor: pointer;
+            border-radius: 26px;
+            transition: all 0.35s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--walnut);
+            color: var(--cream);
+            box-shadow: 0 2px 8px var(--shadow-deep);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--walnut);
+        }
+
+        /* ── Main Container ───────────────────────────────── */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.2rem 3rem;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ── Setting Cards ────────────────────────────────── */
+        .card {
+            background: var(--parchment);
+            border-radius: 12px;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 4px 20px var(--shadow-warm), 0 1px 3px var(--shadow-warm);
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: cardIn 0.5s ease forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.12s; }
+        .card:nth-child(3) { animation-delay: 0.19s; }
+        .card:nth-child(4) { animation-delay: 0.26s; }
+        .card:nth-child(5) { animation-delay: 0.33s; }
+        .card:nth-child(6) { animation-delay: 0.40s; }
+
+        @keyframes cardIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 1.1rem 1.4rem 0.8rem;
+            border-bottom: 1px solid rgba(200, 149, 108, 0.15);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card-header:hover .card-title {
+            color: var(--amber);
+        }
+
+        .card-icon {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .card-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--walnut);
+            transition: color 0.2s;
+            flex: 1;
+        }
+
+        .card-chevron {
+            width: 20px;
+            height: 20px;
+            color: var(--warm-gray-light);
+            transition: transform 0.3s ease;
+        }
+
+        .card.collapsed .card-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .card-body {
+            padding: 0.4rem 1.4rem 1.2rem;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .card.collapsed .card-body {
+            max-height: 0 !important;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        /* ── SVG Corner Ornaments ─────────────────────────── */
+        .card::before, .card::after {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            opacity: 0.25;
+        }
+
+        .card::before {
+            top: 0; left: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M2 12 Q2 2 12 2' stroke='%23C8956C' fill='none' stroke-width='1.5'/%3E%3Cpath d='M2 8 Q2 2 8 2' stroke='%23C8956C' fill='none' stroke-width='1'/%3E%3Ccircle cx='2' cy='2' r='1.5' fill='%23C8956C'/%3E%3C/svg%3E") no-repeat;
+        }
+
+        .card::after {
+            bottom: 0; right: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M30 20 Q30 30 20 30' stroke='%23C8956C' fill='none' stroke-width='1.5'/%3E%3Cpath d='M30 24 Q30 30 24 30' stroke='%23C8956C' fill='none' stroke-width='1'/%3E%3Ccircle cx='30' cy='30' r='1.5' fill='%23C8956C'/%3E%3C/svg%3E") no-repeat;
+        }
+
+        /* ── Form Fields ──────────────────────────────────── */
+        .field-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid rgba(200, 149, 108, 0.08);
+            gap: 1rem;
+        }
+
+        .field-row:last-child { border-bottom: none; }
+
+        .field-label {
+            font-size: 0.88rem;
+            color: var(--walnut-light);
+            flex-shrink: 0;
+            min-width: 0;
+        }
+
+        .field-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            cursor: pointer;
+        }
+
+        .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            background: var(--warm-gray-light);
+            border-radius: 13px;
+            transition: background 0.3s ease;
+        }
+
+        .toggle input:checked + .toggle-track {
+            background: var(--amber);
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: var(--parchment);
+            border-radius: 50%;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .toggle input:checked ~ .toggle-thumb {
+            transform: translateX(22px);
+        }
+
+        /* Slider */
+        .range-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .range-wrap input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 120px;
+            height: 6px;
+            background: linear-gradient(90deg, var(--amber-light), var(--amber));
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .range-wrap input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--parchment);
+            border: 2px solid var(--amber);
+            border-radius: 50%;
+            box-shadow: 0 1px 4px var(--shadow-warm);
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .range-wrap input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .range-wrap input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--parchment);
+            border: 2px solid var(--amber);
+            border-radius: 50%;
+            box-shadow: 0 1px 4px var(--shadow-warm);
+            cursor: pointer;
+        }
+
+        .range-value {
+            font-size: 0.8rem;
+            color: var(--warm-gray);
+            min-width: 3ch;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Number / Text inputs */
+        input[type="number"], input[type="text"], select {
+            font-family: 'Lora', serif;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid var(--amber-light);
+            border-radius: 6px;
+            background: var(--cream);
+            color: var(--walnut);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="number"] { width: 70px; }
+        input[type="text"] { width: 160px; }
+        select { min-width: 60px; }
+
+        input:focus, select:focus {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(200, 149, 108, 0.15);
+        }
+
+        /* ── Action Bar ───────────────────────────────────── */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 0.7rem 2rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.03em;
+        }
+
+        .btn-primary {
+            background: var(--walnut);
+            color: var(--cream);
+            box-shadow: 0 3px 12px var(--shadow-deep);
+        }
+
+        .btn-primary:hover {
+            background: var(--walnut-mid);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 18px var(--shadow-deep);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--walnut);
+            border: 1.5px solid var(--amber-light);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--amber);
+            background: rgba(200, 149, 108, 0.08);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: #8B4513;
+            border: 1.5px solid #D2A679;
+        }
+
+        .btn-danger:hover {
+            background: rgba(139, 69, 19, 0.06);
+            border-color: #8B4513;
+        }
+
+        /* ── Advanced YAML Editor ─────────────────────────── */
+        .yaml-editor {
+            width: 100%;
+            min-height: 500px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            padding: 1.2rem;
+            border: 1px solid var(--amber-light);
+            border-radius: 10px;
+            background: var(--parchment);
+            color: var(--walnut);
+            resize: vertical;
+            outline: none;
+            tab-size: 2;
+        }
+
+        .yaml-editor:focus {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(200, 149, 108, 0.12);
+        }
+
+        .yaml-warning {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1rem;
+            background: rgba(200, 149, 108, 0.1);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--walnut-light);
+            font-style: italic;
+        }
+
+        .yaml-warning svg { flex-shrink: 0; }
+
+        /* ── Toast ────────────────────────────────────────── */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            padding: 0.8rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-family: 'Lora', serif;
+            box-shadow: 0 4px 16px var(--shadow-deep);
+            animation: toastIn 0.4s ease, toastOut 0.4s ease 2.6s forwards;
+            max-width: 340px;
+        }
+
+        .toast-ok {
+            background: var(--walnut);
+            color: var(--cream);
+        }
+
+        .toast-error {
+            background: #6B2D2D;
+            color: #F5E0D0;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateY(-8px); }
+        }
+
+        /* ── Decorative Footer ────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 2rem 1rem 1.5rem;
+            color: var(--warm-gray-light);
+            font-size: 0.78rem;
+            font-style: italic;
+        }
+
+        footer svg { vertical-align: middle; margin: 0 0.3rem; }
+
+        /* ── Responsive ───────────────────────────────────── */
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+
+            .field-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+            }
+
+            .field-control { width: 100%; }
+
+            .range-wrap input[type="range"] { flex: 1; width: auto; }
+
+            input[type="text"] { width: 100%; }
+
+            .action-bar { flex-direction: column; align-items: stretch; }
+
+            .btn { text-align: center; }
+        }
+
+        /* ── Confirm Dialog ───────────────────────────────── */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(58, 42, 26, 0.45);
+            backdrop-filter: blur(3px);
+            z-index: 900;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay.show { display: flex; }
+
+        .dialog {
+            background: var(--parchment);
+            border-radius: 14px;
+            padding: 2rem;
+            max-width: 380px;
+            width: 90%;
+            box-shadow: 0 12px 40px rgba(58, 42, 26, 0.3);
+            text-align: center;
+        }
+
+        .dialog h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dialog p {
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .dialog-actions {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="display:block;margin:0 auto 0.5rem;">
+            <rect x="3" y="3" width="34" height="34" rx="3" stroke="#C8956C" stroke-width="1.5" fill="none"/>
+            <rect x="7" y="7" width="26" height="26" rx="2" stroke="#C8956C" stroke-width="1" fill="none" opacity="0.5"/>
+            <circle cx="20" cy="18" r="5" stroke="#C8956C" stroke-width="1" fill="none" opacity="0.6"/>
+            <path d="M8 30 Q14 22 20 26 Q26 30 32 24" stroke="#C8956C" stroke-width="1" fill="none" opacity="0.5"/>
+        </svg>
+        <h1>Picture Frame Settings</h1>
+        <p>Adjust your photo frame, from anywhere</p>
+        <hr class="header-rule">
+    </header>
+
+    <div class="container">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('settings')">Settings</button>
+            <button class="tab-btn" onclick="switchTab('advanced')">Advanced</button>
+        </div>
+
+        <!-- ── Curated Settings ──────────────────────── -->
+        <div id="tab-settings" class="tab-content active">
+            {% for card_name, card_info in schema.items() %}
+            <div class="card" data-section="{{ card_info.section }}">
+                <div class="card-header" onclick="toggleCard(this.parentElement)">
+                    <div class="card-icon">
+                        {% if card_info.icon == 'slideshow' %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" color="#C8956C"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 10l3-3 2 2 3-3 3 3"/></svg>
+                        {% elif card_info.icon == 'display' %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/></svg>
+                        {% elif card_info.icon == 'text' %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="1.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+                        {% elif card_info.icon == 'frame' %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><rect x="5" y="5" width="14" height="14" rx="1"/><rect x="8" y="8" width="8" height="8" rx="0.5"/></svg>
+                        {% elif card_info.icon == 'photos' %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                        {% elif card_info.icon == 'clock' %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        {% endif %}
+                    </div>
+                    <span class="card-title">{{ card_name }}</span>
+                    <svg class="card-chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M6 8l4 4 4-4"/></svg>
+                </div>
+                <div class="card-body">
+                    {% for key, label, input_type, extra in card_info.fields %}
+                    <div class="field-row">
+                        <span class="field-label">{{ label }}</span>
+                        <div class="field-control">
+                            {% if input_type == 'toggle' %}
+                            <label class="toggle">
+                                <input type="checkbox"
+                                       data-section="{{ card_info.section }}"
+                                       data-key="{{ key }}"
+                                       {% if config[card_info.section][key] %}checked{% endif %}>
+                                <span class="toggle-track"></span>
+                                <span class="toggle-thumb"></span>
+                            </label>
+                            {% elif input_type == 'slider' %}
+                            <div class="range-wrap">
+                                <input type="range"
+                                       data-section="{{ card_info.section }}"
+                                       data-key="{{ key }}"
+                                       min="{{ extra.min }}"
+                                       max="{{ extra.max }}"
+                                       step="{{ extra.step }}"
+                                       value="{{ config[card_info.section][key] }}"
+                                       oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="range-value">{{ config[card_info.section][key] }}</span>
+                            </div>
+                            {% elif input_type == 'number' %}
+                            <input type="number"
+                                   data-section="{{ card_info.section }}"
+                                   data-key="{{ key }}"
+                                   {% if extra.min is defined %}min="{{ extra.min }}"{% endif %}
+                                   {% if extra.max is defined %}max="{{ extra.max }}"{% endif %}
+                                   value="{{ config[card_info.section][key] }}">
+                            {% elif input_type == 'select' %}
+                            <select data-section="{{ card_info.section }}"
+                                    data-key="{{ key }}">
+                                {% for opt in extra.options %}
+                                <option value="{{ opt }}" {% if config[card_info.section][key] == opt %}selected{% endif %}>{{ opt }}</option>
+                                {% endfor %}
+                            </select>
+                            {% elif input_type == 'text' %}
+                            <input type="text"
+                                   data-section="{{ card_info.section }}"
+                                   data-key="{{ key }}"
+                                   value="{{ config[card_info.section][key] }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="action-bar">
+                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+                <button class="btn btn-danger" onclick="showRestartDialog()">Restart Picframe</button>
+            </div>
+        </div>
+
+        <!-- ── Advanced YAML Editor ──────────────────── -->
+        <div id="tab-advanced" class="tab-content">
+            <div class="yaml-warning">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="#8B6914"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 15H9v-2h2v2zm0-4H9V5h2v6z"/></svg>
+                Edit carefully — invalid YAML will be rejected.
+            </div>
+            <textarea class="yaml-editor" id="yaml-editor" spellcheck="false">{{ raw_yaml }}</textarea>
+            <div class="action-bar" style="margin-top: 1rem;">
+                <button class="btn btn-primary" onclick="saveRawYaml()">Save YAML</button>
+                <button class="btn btn-secondary" onclick="reloadYaml()">Reload from Disk</button>
+                <button class="btn btn-danger" onclick="showRestartDialog()">Restart Picframe</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Restart Confirmation ───────────────────── -->
+    <div class="overlay" id="restart-dialog">
+        <div class="dialog">
+            <h3>Restart Picframe?</h3>
+            <p>The photo frame will briefly go dark while it restarts. Changes you've saved will take effect.</p>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" onclick="hideRestartDialog()">Cancel</button>
+                <button class="btn btn-primary" onclick="restartPicframe()">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <footer>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B8ADA2" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Pi Photo Frame Config Editor
+    </footer>
+
+    <script>
+        /* ── Tab Switching ───────────────────────────── */
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                b.classList.toggle('active', (tab === 'settings' && i === 0) || (tab === 'advanced' && i === 1));
+            });
+            document.getElementById('tab-settings').classList.toggle('active', tab === 'settings');
+            document.getElementById('tab-advanced').classList.toggle('active', tab === 'advanced');
+        }
+
+        /* ── Card Collapse ───────────────────────────── */
+        function toggleCard(card) {
+            card.classList.toggle('collapsed');
+        }
+
+        /* ── Gather Settings ─────────────────────────── */
+        function gatherSettings() {
+            const data = {};
+            document.querySelectorAll('[data-section][data-key]').forEach(el => {
+                const section = el.dataset.section;
+                const key = el.dataset.key;
+                if (!data[section]) data[section] = {};
+
+                let val;
+                if (el.type === 'checkbox') {
+                    val = el.checked;
+                } else if (el.type === 'range' || el.type === 'number') {
+                    val = el.step && el.step.includes('.') ? parseFloat(el.value) : Number(el.value);
+                    // Handle floats from step attribute
+                    const step = el.getAttribute('step');
+                    if (step && step.includes('.')) {
+                        val = parseFloat(el.value);
+                    } else {
+                        const num = Number(el.value);
+                        val = Number.isInteger(num) ? num : num;
+                    }
+                } else {
+                    val = el.value;
+                }
+                data[section][key] = val;
+            });
+            return data;
+        }
+
+        /* ── Save Settings ───────────────────────────── */
+        async function saveSettings() {
+            try {
+                const res = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(gatherSettings()),
+                });
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    showToast('Settings saved', 'ok');
+                    // Reload YAML editor content too
+                    const configRes = await fetch('/api/config');
+                    if (configRes.ok) reloadYaml();
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            } catch (e) {
+                showToast('Network error: ' + e.message, 'error');
+            }
+        }
+
+        /* ── Save Raw YAML ───────────────────────────── */
+        async function saveRawYaml() {
+            try {
+                const yaml = document.getElementById('yaml-editor').value;
+                const res = await fetch('/api/config/raw', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ yaml }),
+                });
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    showToast('YAML saved', 'ok');
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            } catch (e) {
+                showToast('Network error: ' + e.message, 'error');
+            }
+        }
+
+        /* ── Reload YAML ─────────────────────────────── */
+        async function reloadYaml() {
+            try {
+                const res = await fetch('/');
+                const html = await res.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newYaml = doc.getElementById('yaml-editor');
+                if (newYaml) {
+                    document.getElementById('yaml-editor').value = newYaml.value;
+                }
+            } catch (e) {
+                showToast('Error reloading: ' + e.message, 'error');
+            }
+        }
+
+        /* ── Restart ─────────────────────────────────── */
+        function showRestartDialog() {
+            document.getElementById('restart-dialog').classList.add('show');
+        }
+
+        function hideRestartDialog() {
+            document.getElementById('restart-dialog').classList.remove('show');
+        }
+
+        async function restartPicframe() {
+            hideRestartDialog();
+            try {
+                const res = await fetch('/api/restart', { method: 'POST' });
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    showToast('Picframe restarting...', 'ok');
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            } catch (e) {
+                showToast('Network error: ' + e.message, 'error');
+            }
+        }
+
+        /* ── Toast ───────────────────────────────────── */
+        function showToast(message, type) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-' + type;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3200);
+        }
+    </script>
+
+</body>
+</html>

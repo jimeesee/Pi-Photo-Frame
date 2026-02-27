@@ -1,0 +1,15 @@
+[Unit]
+Description=Picframe Config Editor Web App
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi/config_editor
+ExecStart=/usr/bin/python3 /home/pi/config_editor/app.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
