@@ -1,0 +1,9 @@
+[Unit]
+Description=PictureFrame on Pi
+
+[Service]
+ExecStart=/usr/bin/labwc
+Restart=always
+
+[Install]
+WantedBy=default.target

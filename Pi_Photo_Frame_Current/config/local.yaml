@@ -1,9 +1,0 @@
-viewer:
-  cache_dir: /home/jimbo/Pi_Photo_Frame/cache/photos
-  interval_seconds: 15
-  shuffle: true
-  fade_seconds: 1.5
-
-logging:
-  file: /home/jimbo/Pi_Photo_Frame/logs/viewer.log
-  level: INFO

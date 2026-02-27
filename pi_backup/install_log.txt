@@ -1,0 +1,121 @@
+Checking for an active internet connection...
+Internet connection confirmed.
+Step 1: Updating operating system...
+Added systemd service for reboot resume.
+Rebooting to complete the installation. The script will continue after reboot.
+Step 2: Updating raspi-config...
+Added systemd service for reboot resume.
+Rebooting to complete the installation. The script will continue after reboot.
+Checking for an active internet connection...
+No internet connection. Retrying in 5 seconds...
+No internet connection. Retrying in 5 seconds...
+Internet connection confirmed.
+Step 3: Installing Samba and configuring user...
+Samba installation and configuration completed.
+Checking for an active internet connection...
+Internet connection confirmed.
+Step 4: Installing additional packages...
+Directories 'Pictures' and 'DeletedPictures' created.
+Mosquitto Server installed.
+Added systemd service for reboot resume.
+Rebooting to complete the installation. The script will continue after reboot.
+Checking for an active internet connection...
+No internet connection. Retrying in 5 seconds...
+No internet connection. Retrying in 5 seconds...
+Internet connection confirmed.
+Step 5: Installing picframe...
+Creating virtual environment for picframe...
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+Setting up Python virtual environment...
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+Activating virtual environment...
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+Installing paho-mqtt...
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting paho-mqtt
+  Downloading https://www.piwheels.org/simple/paho-mqtt/paho_mqtt-2.1.0-py3-none-any.whl (67 kB)
+Installing collected packages: paho-mqtt
+Successfully installed paho-mqtt-2.1.0
+Installing picframe...
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting picframe
+  Downloading https://archive1.piwheels.org/simple/picframe/picframe-2025.6.18-py3-none-any.whl (3.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 2.8 MB/s eta 0:00:00
+Collecting Pillow>=10.2.0 (from picframe)
+  Downloading pillow-12.0.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (8.8 kB)
+Collecting defusedxml (from picframe)
+  Downloading https://www.piwheels.org/simple/defusedxml/defusedxml-0.7.1-py2.py3-none-any.whl (25 kB)
+Collecting pi3d>=2.54 (from picframe)
+  Downloading https://www.piwheels.org/simple/pi3d/pi3d-2.55-py3-none-any.whl (289 kB)
+Collecting PyYAML (from picframe)
+  Downloading pyyaml-6.0.3-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.4 kB)
+Requirement already satisfied: paho-mqtt>=2.1.0 in ./venv_picframe/lib/python3.13/site-packages (from picframe) (2.1.0)
+Collecting IPTCInfo3 (from picframe)
+  Downloading https://www.piwheels.org/simple/iptcinfo3/iptcinfo3-2.3.0-py3-none-any.whl (13 kB)
+Collecting numpy (from picframe)
+  Downloading numpy-2.4.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+Collecting ninepatch>=0.2.0 (from picframe)
+  Downloading ninepatch-0.2.0-py3-none-any.whl.metadata (4.9 kB)
+Collecting pi_heif>=0.8.0 (from picframe)
+  Downloading pi_heif-1.1.1-cp313-cp313-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (6.5 kB)
+Collecting python-vlc (from picframe)
+  Downloading https://www.piwheels.org/simple/python-vlc/python_vlc-3.0.21203-py3-none-any.whl (87 kB)
+Collecting pysdl2 (from pi3d>=2.54->picframe)
+  Downloading https://www.piwheels.org/simple/pysdl2/PySDL2-0.9.17-py3-none-any.whl (583 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 583.1/583.1 kB 1.1 MB/s eta 0:00:00
+Downloading ninepatch-0.2.0-py3-none-any.whl (9.1 kB)
+Downloading pi_heif-1.1.1-cp313-cp313-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 3.3 MB/s eta 0:00:00
+Downloading pillow-12.0.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (6.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 3.8 MB/s eta 0:00:00
+Downloading numpy-2.4.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (14.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.4/14.4 MB 4.0 MB/s eta 0:00:00
+Downloading pyyaml-6.0.3-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (767 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 767.1/767.1 kB 4.0 MB/s eta 0:00:00
+Installing collected packages: python-vlc, pysdl2, PyYAML, Pillow, numpy, IPTCInfo3, defusedxml, pi3d, pi_heif, ninepatch, picframe
+
+Successfully installed IPTCInfo3-2.3.0 Pillow-12.0.0 PyYAML-6.0.3 defusedxml-0.7.1 ninepatch-0.2.0 numpy-2.4.0 pi3d-2.55 pi_heif-1.1.1 picframe-2025.6.18 pysdl2-0.9.17 python-vlc-3.0.21203
+Initializing Picframe with default directories...
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+INFO:start.py:starting ['/home/pi/venv_picframe/bin/picframe', '-i', '/home/pi/']
+This will configure  /home/pi/picframe_data/config/configuration.yaml
+To keep default, just hit enter
+Enter picture directory [~/Pictures]: Enter picture directory [~/DeletedPictures]: Enter locale [en_GB.UTF-8]: created /home/pi/picframe_data
+Picframe initialized with default directories.
+Step 6: Configuring Mosquitto for anonymous access and listener...
+Editing /etc/mosquitto/mosquitto.conf to allow anonymous access and open listener...
+Mosquitto configuration updated and service restarted.
+Mosquitto configuration completed.
+Step 6: Creating autostart script for Picframe as user 'pi'...
+Autostart script created and made executable: /home/pi/start_picframe.sh.
+Directory setup and autostart script creation completed.
+Step 7: Configuring autostart for Picframe with labwc and setting up systemd service as user 'pi'...
+Created labwc autostart configuration: /home/pi/.config/labwc/autostart
+Created labwc rc.xml configuration for window decoration: /home/pi/.config/labwc/rc.xml
+Created systemd service for Picframe: /home/pi/.config/systemd/user/picframe.service
+Enabled systemd user service for Picframe autostart.
+Autostart configuration for Picframe completed. Rebooting to apply changes.
+Added systemd service for reboot resume.
+Rebooting to complete the installation. The script will continue after reboot.
+Removed systemd service after completion.
+Installation script completed, and systemd service removed. Rebooting now...

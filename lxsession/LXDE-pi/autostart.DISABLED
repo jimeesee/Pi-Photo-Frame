@@ -1,1 +1,0 @@
-@bash -lc 'sleep 5; /home/jimbo/Pi_Photo_Frame/.venv/bin/python -m src.viewer.main --config /home/jimbo/Pi_Photo_Frame/config/local.yaml'

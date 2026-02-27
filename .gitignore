@@ -4,15 +4,19 @@ __pycache__/
 .env
 .DS_Store
 
-# Cache photos (all subdirs)
-**/cache/photos/*
-!**/cache/photos/.gitkeep
-**/cache/.gitkeep
+# Logs
+*.log
 
-# Logs (all subdirs)
-**/logs/*
-!**/logs/.gitkeep
-
-# Backup files
+# Backup/temp files
 *.bak
 *.bak.*
+*.db3
+
+# Pi system files (not relevant to repo)
+pi_backup/.bash_history
+pi_backup/.Xauthority
+pi_backup/.xsession-errors*
+pi_backup/.config/pulse/
+pi_backup/.config/dconf/
+pi_backup/.config/rclone/
+pi_backup/.local/

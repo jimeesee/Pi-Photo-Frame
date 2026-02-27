@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<windowRules>
+  <windowRule identifier="*" serverDecoration="no"/>
+</windowRules>
