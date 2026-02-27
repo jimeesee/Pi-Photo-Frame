@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+
+# Cache photos (all subdirs)
+**/cache/photos/*
+!**/cache/photos/.gitkeep
+**/cache/.gitkeep
+
+# Logs (all subdirs)
+**/logs/*
+!**/logs/.gitkeep
+
+# Backup files
+*.bak
+*.bak.*
