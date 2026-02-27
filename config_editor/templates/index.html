@@ -654,39 +654,22 @@
                         </div>
                     </div>
                     {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-
-            <!-- ── Screen Rotation Card ──────────────── -->
-            <div class="card">
-                <div class="card-header" onclick="toggleCard(this.parentElement)">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="1.5"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15.36-4.36"/><path d="M20 15a9 9 0 0 1-15.36 4.36"/></svg>
-                    </div>
-                    <span class="card-title">Screen Rotation</span>
-                    <svg class="card-chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M6 8l4 4 4-4"/></svg>
-                </div>
-                <div class="card-body">
+                    {% if card_name == 'Display' %}
                     <div class="field-row">
-                        <span class="field-label">Orientation</span>
+                        <span class="field-label">Screen Orientation</span>
                         <div class="field-control">
-                            <select id="rotation-select">
+                            <select id="rotation-select" onchange="applyRotation()">
                                 <option value="normal" {% if current_transform == 'normal' %}selected{% endif %}>Landscape</option>
                                 <option value="90" {% if current_transform == '90' %}selected{% endif %}>Portrait (90° CW)</option>
                                 <option value="270" {% if current_transform == '270' %}selected{% endif %}>Portrait (90° CCW)</option>
-                                <option value="180" {% if current_transform == '180' %}selected{% endif %}>Landscape (Upside Down)</option>
+                                <option value="180" {% if current_transform == '180' %}selected{% endif %}>Upside Down</option>
                             </select>
                         </div>
                     </div>
-                    <div class="field-row">
-                        <span class="field-label" style="font-style:italic;color:var(--warm-gray);font-size:0.82rem;">Takes effect immediately — no restart needed</span>
-                        <div class="field-control">
-                            <button class="btn btn-primary" style="padding:0.5rem 1.4rem;font-size:0.95rem;" onclick="applyRotation()">Apply</button>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
+            {% endfor %}
 
             <div class="action-bar">
                 <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
