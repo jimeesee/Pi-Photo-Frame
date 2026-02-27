@@ -1,0 +1,16 @@
+[Unit]
+Description=Touch Swipe Daemon for Pi Photo Frame
+After=graphical-session.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStartPre=/bin/sleep 5
+ExecStart=/home/pi/touch_daemon_venv/bin/python3 /home/pi/touch_daemon/touch_daemon.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
